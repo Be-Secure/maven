@@ -18,26 +18,29 @@
  */
 package org.apache.maven.artifact.repository.metadata.io.xpp3;
 
+import javax.xml.stream.XMLStreamException;
+
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
 import org.apache.maven.artifact.repository.metadata.Metadata;
 
 /**
- * Provide public methods from {@link org.apache.maven.artifact.repository.metadata.io.MetadataXpp3Writer}
+ * Provide public methods from {@link org.apache.maven.artifact.repository.metadata.io.MetadataStaxWriter}
  *
  * @deprecated Maven 3 compatability
  */
 @Deprecated
 public class MetadataXpp3Writer {
 
-    private final org.apache.maven.artifact.repository.metadata.io.MetadataXpp3Writer delegate;
+    private final org.apache.maven.artifact.repository.metadata.io.MetadataStaxWriter delegate;
 
     /**
      * Default constructor
      */
     public MetadataXpp3Writer() {
-        delegate = new org.apache.maven.artifact.repository.metadata.io.MetadataXpp3Writer();
+        delegate = new org.apache.maven.artifact.repository.metadata.io.MetadataStaxWriter();
     }
 
     /**
@@ -57,7 +60,11 @@ public class MetadataXpp3Writer {
      * @throws java.io.IOException java.io.IOException if any
      */
     public void write(Writer writer, Metadata metadata) throws java.io.IOException {
-        delegate.write(writer, metadata.getDelegate());
+        try {
+            delegate.write(writer, metadata.getDelegate());
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
     }
 
     /**
@@ -68,6 +75,10 @@ public class MetadataXpp3Writer {
      * @throws java.io.IOException java.io.IOException if any
      */
     public void write(OutputStream stream, Metadata metadata) throws java.io.IOException {
-        delegate.write(stream, metadata.getDelegate());
+        try {
+            delegate.write(stream, metadata.getDelegate());
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
     }
 }

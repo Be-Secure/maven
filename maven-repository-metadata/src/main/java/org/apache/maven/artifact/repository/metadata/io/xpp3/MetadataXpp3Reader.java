@@ -26,22 +26,23 @@ import java.io.InputStream;
 import java.io.Reader;
 
 import org.apache.maven.artifact.repository.metadata.Metadata;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
- * Provide public methods from {@link org.apache.maven.artifact.repository.metadata.io.MetadataXpp3Reader}
+ * Provide public methods from {@link org.apache.maven.artifact.repository.metadata.io.MetadataStaxReader}
  *
  * @deprecated Maven 3 compatability
  */
 @Deprecated
 public class MetadataXpp3Reader {
 
-    private final org.apache.maven.artifact.repository.metadata.io.MetadataXpp3Reader delegate;
+    private final org.apache.maven.artifact.repository.metadata.io.MetadataStaxReader delegate;
 
     /**
      * Default constructor
      */
     public MetadataXpp3Reader() {
-        delegate = new org.apache.maven.artifact.repository.metadata.io.MetadataXpp3Reader();
+        delegate = new org.apache.maven.artifact.repository.metadata.io.MetadataStaxReader();
     }
 
     /**
@@ -51,7 +52,7 @@ public class MetadataXpp3Reader {
      */
     public MetadataXpp3Reader(ContentTransformer contentTransformer) {
         delegate =
-                new org.apache.maven.artifact.repository.metadata.io.MetadataXpp3Reader(contentTransformer::transform);
+                new org.apache.maven.artifact.repository.metadata.io.MetadataStaxReader(contentTransformer::transform);
     }
 
     /**
@@ -79,11 +80,15 @@ public class MetadataXpp3Reader {
      * @param strict a strict object.
      * @return Metadata
      * @throws IOException            IOException if any.
-     * @throws XMLStreamException XmlPullParserException if
+     * @throws XmlPullParserException XmlPullParserException if
      *                                any.
      */
-    public Metadata read(Reader reader, boolean strict) throws IOException, XMLStreamException {
-        return new Metadata(delegate.read(reader, strict));
+    public Metadata read(Reader reader, boolean strict) throws IOException, XmlPullParserException {
+        try {
+            return new Metadata(delegate.read(reader, strict));
+        } catch (XMLStreamException e) {
+            throw new XmlPullParserException(e.getMessage(), null, e);
+        }
     }
 
     /**
@@ -92,11 +97,15 @@ public class MetadataXpp3Reader {
      * @param reader a reader object.
      * @return Metadata
      * @throws IOException            IOException if any.
-     * @throws XMLStreamException XmlPullParserException if
+     * @throws XmlPullParserException XmlPullParserException if
      *                                any.
      */
-    public Metadata read(Reader reader) throws IOException, XMLStreamException {
-        return new Metadata(delegate.read(reader));
+    public Metadata read(Reader reader) throws IOException, XmlPullParserException {
+        try {
+            return new Metadata(delegate.read(reader));
+        } catch (XMLStreamException e) {
+            throw new XmlPullParserException(e.getMessage(), null, e);
+        }
     }
 
     /**
@@ -106,11 +115,15 @@ public class MetadataXpp3Reader {
      * @param strict a strict object.
      * @return Metadata
      * @throws IOException            IOException if any.
-     * @throws XMLStreamException XmlPullParserException if
+     * @throws XmlPullParserException XmlPullParserException if
      *                                any.
      */
-    public Metadata read(InputStream in, boolean strict) throws IOException, XMLStreamException {
-        return new Metadata(delegate.read(in, strict));
+    public Metadata read(InputStream in, boolean strict) throws IOException, XmlPullParserException {
+        try {
+            return new Metadata(delegate.read(in, strict));
+        } catch (XMLStreamException e) {
+            throw new XmlPullParserException(e.getMessage(), null, e);
+        }
     }
 
     /**
@@ -119,11 +132,15 @@ public class MetadataXpp3Reader {
      * @param in a in object.
      * @return Metadata
      * @throws IOException            IOException if any.
-     * @throws XMLStreamException XmlPullParserException if
+     * @throws XmlPullParserException XmlPullParserException if
      *                                any.
      */
-    public Metadata read(InputStream in) throws IOException, XMLStreamException {
-        return new Metadata(delegate.read(in));
+    public Metadata read(InputStream in) throws IOException, XmlPullParserException {
+        try {
+            return new Metadata(delegate.read(in));
+        } catch (XMLStreamException e) {
+            throw new XmlPullParserException(e.getMessage(), null, e);
+        }
     }
 
     /**
@@ -133,15 +150,19 @@ public class MetadataXpp3Reader {
      * @param strict a strict object.
      * @return Metadata
      * @throws IOException            IOException if any.
-     * @throws XMLStreamException XmlPullParserException if
+     * @throws XmlPullParserException XmlPullParserException if
      *                                any.
      */
-    public Metadata read(XMLStreamReader parser, boolean strict) throws IOException, XMLStreamException {
-        return new Metadata(delegate.read(parser, strict));
+    public Metadata read(XMLStreamReader parser, boolean strict) throws IOException, XmlPullParserException {
+        try {
+            return new Metadata(delegate.read(parser, strict));
+        } catch (XMLStreamException e) {
+            throw new XmlPullParserException(e.getMessage(), null, e);
+        }
     }
 
     /**
-     * {@link org.apache.maven.artifact.repository.metadata.io.MetadataXpp3Reader.ContentTransformer}
+     * {@link org.apache.maven.artifact.repository.metadata.io.MetadataStaxReader.ContentTransformer}
      */
     public interface ContentTransformer {
         /**
